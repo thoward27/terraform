@@ -4,7 +4,7 @@ terraform {
     organization = "tom-howard-codes-prod"
 
     workspaces {
-      name = "iam"
+      name = "terraform-iam"
     }
   }
   required_providers {
