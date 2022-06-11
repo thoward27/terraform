@@ -4,7 +4,7 @@ terraform {
     organization = "tom-howard-codes-prod"
 
     workspaces {
-      name = "yugabytedb"
+      name = "terraform-yugabyte"
     }
   }
   required_providers {
