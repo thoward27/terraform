@@ -39,7 +39,7 @@ resource "aws_instance" "yugabyte_nodes" {
       host        = self.public_ip
       type        = "ssh"
       user        = var.ssh_user
-      private_key = file(local_file.ssh_private_key)
+      private_key = file(local_file.ssh_private_key.filename)
     }
   }
 
@@ -50,7 +50,7 @@ resource "aws_instance" "yugabyte_nodes" {
       host        = self.public_ip
       type        = "ssh"
       user        = var.ssh_user
-      private_key = file(local_file.ssh_private_key)
+      private_key = file(local_file.ssh_private_key.filename)
     }
   }
 
@@ -61,7 +61,7 @@ resource "aws_instance" "yugabyte_nodes" {
       host        = self.public_ip
       type        = "ssh"
       user        = var.ssh_user
-      private_key = file(local_file.ssh_private_key)
+      private_key = file(local_file.ssh_private_key.filename)
     }
   }
 
@@ -73,7 +73,7 @@ resource "aws_instance" "yugabyte_nodes" {
       host        = self.public_ip
       type        = "ssh"
       user        = var.ssh_user
-      private_key = file(local_file.ssh_private_key)
+      private_key = file(local_file.ssh_private_key.filename)
     }
   }
 
@@ -90,7 +90,7 @@ resource "aws_instance" "yugabyte_nodes" {
       host        = self.public_ip
       type        = "ssh"
       user        = var.ssh_user
-      private_key = file(local_file.ssh_private_key)
+      private_key = file(local_file.ssh_private_key.filename)
     }
   }
 
