@@ -1,25 +1,23 @@
 
-resource "aws_key_pair" "terraform_yugabyte" {
-  key_name   = "terraform-yugabyte"
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKInn8iWpWWPIi4JXMB9So54UDIqXTSeUnaDm7FUoXlY"
+locals {
+  ssh_ip_list = var.use_public_ip_for_ssh == "true" ? join(
+    " ", aws_instance.yugabyte_nodes.*.public_ip,
+  ) : join(" ", aws_instance.yugabyte_nodes.*.private_ip)
+  config_ip_list = join(" ", aws_instance.yugabyte_nodes.*.private_ip)
+  az_list        = join(" ", aws_instance.yugabyte_nodes.*.availability_zone)
 }
 
-resource "local_file" "private_key" {
-  filename        = "${path.module}/yugabyte.key"
-  content_base64  = var.ssh_key
-  file_permission = "0400"
-}
+resource "null_resource" "create_yugabyte_universe" {
+  # Define the trigger condition to run the resource block
+  triggers = {
+    cluster_instance_ids = join(",", aws_instance.yugabyte_nodes.*.id)
+  }
 
-module "yugabyte_db_cluster" {
-  source             = "github.com/yugabyte/terraform-aws-yugabyte"
-  cluster_name       = "prod-main-yb1-use1"
-  ssh_keypair        = aws_key_pair.terraform_yugabyte.key_name
-  ssh_private_key    = local_file.private_key.filename
-  instance_type      = "t3.medium"
-  num_instances      = "3"
-  replication_factor = "3"
-  region_name        = "us-east-1"
-  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  subnet_ids         = [aws_subnet.prod_main_use1a.id, aws_subnet.prod_main_use1b.id, aws_subnet.prod_main_use1c.id]
-  vpc_id             = aws_vpc.prod_main.id
+  # Execute after the nodes are provisioned and the software installed.
+  depends_on = [aws_instance.yugabyte_nodes]
+
+  provisioner "local-exec" {
+    # Bootstrap script called with private_ip of each node in the clutser
+    command = "${path.module}/utilities/scripts/create_universe.sh 'aws' '${var.aws_region}' ${var.replication_factor} '${local.config_ip_list}' '${local.ssh_ip_list}' '${local.az_list}' ${var.ssh_user} ${var.ssh_private_key}"
+  }
 }

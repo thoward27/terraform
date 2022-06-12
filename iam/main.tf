@@ -1,3 +1,3 @@
 module "default" {
-    source = "./src"
+  source = "./src"
 }
