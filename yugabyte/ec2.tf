@@ -18,7 +18,7 @@ resource "aws_instance" "yugabyte_nodes" {
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.terraform_yugabyte.key_name
   availability_zone           = element(var.aws_availability_zones[var.aws_region], count.index)
-  subnet_id                   = aws_subnet.prod[count.index].id
+  subnet_id                   = element(data.terraform_remote_state.vpc.outputs.aws_subnet_ids, count.index)
   vpc_security_group_ids = [
     aws_security_group.yugabyte_external.id,
     aws_security_group.yugabyte_intra.id,
