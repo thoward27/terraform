@@ -95,4 +95,3 @@ variable "yb_version" {
   default     = "2.13.2.0-b135"
   type        = string
 }
-

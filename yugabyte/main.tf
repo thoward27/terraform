@@ -18,6 +18,6 @@ resource "null_resource" "create_yugabyte_universe" {
 
   provisioner "local-exec" {
     # Bootstrap script called with private_ip of each node in the clutser
-    command = "${path.module}/utilities/scripts/create_universe.sh 'aws' '${var.aws_region}' ${var.replication_factor} '${local.config_ip_list}' '${local.ssh_ip_list}' '${local.az_list}' ${var.ssh_user} ${var.ssh_private_key}"
+    command = "${path.module}/utilities/scripts/create_universe.sh 'aws' '${var.aws_region}' ${var.replication_factor} '${local.config_ip_list}' '${local.ssh_ip_list}' '${local.az_list}' ${var.ssh_user} ${local_file.ssh_private_key.filename}"
   }
 }
