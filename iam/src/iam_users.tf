@@ -36,7 +36,7 @@ resource "aws_iam_user" "dev_cli_access" {
   }
 }
 
-resource "aws_am_access_key" "dev_cli_access" {
+resource "aws_iam_access_key" "dev_cli_access" {
   user    = aws_iam_user.dev_cli_access.name
   pgp_key = var.base64_pgp_public_key
 }
