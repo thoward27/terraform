@@ -8,7 +8,7 @@ output "terraform_cloud_access_key_secret" {
   sensitive = true
 }
 
-output "dev_cli_access__key_id" {
+output "dev_cli_access_key_id" {
   value = module.default.aws_iam_access_key_id_dev_cli_access
 }
 
