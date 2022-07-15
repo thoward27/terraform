@@ -31,8 +31,24 @@ variable "aws_availability_zones" {
   }
 }
 
-variable "aws_subnets" {
-  description = "How many subnets to stand up in the given region."
+variable "aws_az_span_count" {
+  description = "Nunber of AZs to span in the selected region."
   default     = 3
-  type        = string
+  type        = number
+  validation {
+    condition = var.aws_az_span_count > 0 && var.aws_az_span_count < 15
+    error_message = "The aws_az_span_count must be greater than 0 and less than 15."
+  }
+}
+
+# https://cidr.xyz/ - 10.0.0.1 / 10.0.15.254 / 4,096 URLs
+variable "internal_cidr_block" {
+  description = "CIDR block for internal resources."
+  default = "10.0.0.0/20"
+}
+
+# https://cidr.xyz/ - 10.0.16.1 / 10.0.31.254 / 4,096 URLs
+variable "external_cidr_block" {
+  description = "CIDR block for external resources"
+  default = "10.0.16.0/20"
 }
